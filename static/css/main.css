@@ -1,0 +1,118 @@
+html, body {
+  width: 100%;
+  height: 98%;
+  background: black;
+  color: #fff;
+  margin: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-rendering: optimizelegibility;
+}
+
+.header {
+  width: 100%;
+  float: left;
+  overflow: hidden;
+  margin-bottom: 10%;
+}
+
+.header h1 {
+  color: white;
+  background-color: #95C65F;
+  letter-spacing: -2px;
+  font-size: 60px;
+  padding: 0.5% 4%;
+  margin: 0;
+  float: right;
+  box-shadow: inset 0 3px 7px rgba(0, 0, 0, .2), inset 0 -3px 7px rgba(0, 0, 0, .2);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 1), 0 0 30px rgba(0, 0, 0, .2)
+}
+
+.main {
+  width: 95%;
+  min-height: 100%;
+  margin: 10px auto;
+}
+
+.cases {
+  width: 50%;
+  float: left;
+  margin-left: 2%;
+}
+
+.cases ul {
+  list-style: none outside;
+  margin: 0;
+  padding: 0;
+  text-overflow: ellipses;
+}
+
+.cases ul li {
+  margin-left: 5px;
+}
+
+.cases .id {
+  float: right;
+  background-color: purple;
+  padding: 0.5% 2%;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .4), 0 0 30px rgba(0, 0, 0, .075)
+}
+
+.cases .title {
+  font-size: 20px;
+}
+
+.cases .message {
+  color: #C7C7C7;
+}
+
+.sidebar {
+  float: right;
+  width: 40%;
+  text-align: right;
+}
+
+.short-facts {
+  min-height: 100%;
+}
+
+.statuses {
+  margin-top: 20%;
+  position: relative;
+}
+
+.status {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 1), 0 0 30px rgba(0, 0, 0, .2);
+  padding: 0.5% 2%;
+}
+
+.status-success {
+  background-color: rgba(51, 160, 36, 0.89);
+}
+
+.status-fail {
+  background-color: red;
+}
+
+.status-unknown {
+  background-color: purple;
+}
+
+.footer {
+  display: none;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  background-color: white;
+  text-align: center;
+  color: black;
+  box-shadow: inset 0 3px 7px rgba(0, 0, 0, .2), inset 0 -3px 7px rgba(0, 0, 0, .2);
+  margin-top: 40px;
+}
+
+.footer .time {
+  float: right;
+  margin-right: 20px;
+  color: #666;
+}
+
