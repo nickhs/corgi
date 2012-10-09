@@ -116,3 +116,10 @@ html, body {
   color: #666;
 }
 
+.logo {
+  margin-top: 30%;
+}
+
+.logo img {
+  width: 30%;
+}

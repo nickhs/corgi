@@ -1,13 +1,9 @@
 window.addEvent('domready', function() {
-  var cm = new CasesManager();
-  var corgi_client = new CorgiClient();
+  cm = new CasesManager();
+  ws_manager = new WebsocketManager();
 });
 
 var CasesManager = new Class({
-  Implements: Events,
-  url: '/cases',
-  refresh: 3000,
-
   template: [
     '<div class="mail-icon">',
     '</div>',
@@ -28,45 +24,29 @@ var CasesManager = new Class({
     console.log('init case manager');
     this.spine = $$('.cases ul')[0];
 
-    if (!this.req) {
-      this.req = new Request({
-        url: this.url,
-        onSuccess: this.success.bind(this),
-        onFailure: this.failure.bind(this),
-        onError: this.failure.bind(this)
-      });
-    }
-
-    this.req.get();
-
-    this.intv = setInterval(function() {
-      this.req.get();
-    }.bind(this), this.refresh);
+    this.timechange = setInterval(function() {
+      this.changeTimes();
+    }.bind(this), 60000);
   },
 
-  success: function(resp) {
-    var json = JSON.parse(resp);
-    var cases = json.cases;
-    this.changeCaseCount(cases.length);
+  addCases: function(cases) {
+    console.log("Adding cases", cases);
     var tplt = this.template.join('');
 
-    var new_items = [];
-    if (this.spine.getChildren().length === 0) {
-      new_items = cases;
-    } else {
-      this.spine.getChildren()[0].get('data-id');
+    var existing_cases = this.spine.getChildren();
 
-      for (var i = 0; i > cases.length; i++) {
-        if (child_id == cases[i].id) {
-          new_items = cases.slice(0, i-1);
-          break;
+    if (existing_cases.length === 0) {
+      new_cases = cases.cases;
+    } else {
+      var top_case = existing_cases[0].id;
+      for (var i = cases.cases.length; i < 0; i--) {
+        if (top_case == cases.cases[i].id) {
+          new_cases = cases.cases.slice(cases.cases.length, i+1);
         }
       }
     }
 
-    console.log(new_items);
-
-    new_items.each(function(item, idx) {
+    new_cases.each(function(item, idx) {
       var model = {
         title: item.subject,
         message: item.preview,
@@ -77,16 +57,12 @@ var CasesManager = new Class({
       var el = new Element('li', {
         'class': 'item',
         'data-id': item.id,
+        'data-time': item.date,
         html: tplt.substitute(model)
       });
 
       el.inject(this.spine, 'top');
     }.bind(this));
-  },
-
-  failure: function(resp) {
-    console.log("FAILURE", resp);
-    this.fireEvent("FAILURE");
   },
 
   findRelativeTime: function(time) {
@@ -105,13 +81,37 @@ var CasesManager = new Class({
          return Math.round(elapsed/msPerMinute) + ' minutes ago';
     }
 
-    else if (elapsed < msPerDay ) {
+    else {
          return Math.round(elapsed/msPerHour ) + ' hours ago';
     }
   },
 
   changeCaseCount: function(count) {
-    $$('.open-cases span')[0].set('text', count);
+    console.log("Changing count", count);
+    $$('.open-cases span')[0].set('text', count.count);
+  },
+
+  changeWeekCount: function(count) {
+    $$('.week span')[0].set('text', count.count);
+  },
+
+  changeTimes: function() {
+    console.log("changing times");
+    var children = this.spine.getChildren();
+    children = children.slice(0, 10);
+    children.each(function(child, idx) {
+      time = child.get('data-time');
+      var new_time = this.findRelativeTime(time);
+      child.getElementsByClassName('when')[0].set('text', new_time);
+    }, this);
   }
 });
 
+var WebsocketManager = new Class({
+  initialize: function() {
+   this.socket = io.connect('http://localhost');
+   this.socket.on('new_items', cm.addCases.bind(cm));
+   this.socket.on('count', cm.changeCaseCount.bind(cm));
+   this.socket.on('week_count', cm.changeWeekCount.bind(cm));
+  }
+});

@@ -2,9 +2,10 @@
 <html>
   <head>
     <title>Today In Support</title>
-    <link href="static/css/main.css" rel="stylesheet" type="text/css">
-    <script src="static/js/mootools-core.js"></script>
-    <script src="static/js/main.js"></script>
+    <link href="/static/css/main.css" rel="stylesheet" type="text/css">
+    <script src="/static/js/mootools-core.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/static/js/main.js"></script>
   </head>
 
   <body>
@@ -24,20 +25,16 @@
           <div class="open-cases">
             <h1><span>0</span> Open Cases</h1>
           </div>
-
-          <div class="people-in-office">
-            <h1><span>10 Minutes</span> Resp. Time</h1>
-          </div>
-
-          <div class="lunch">
-            <h1><span>50</span> Cases this Week</h1>
-          </div>
         </div>
 
         <div class="statuses">
           <h1>Site is <span class="status status-success">up</span></h1>
-          <h1>Rewards are <span class="status status-success">active</span></h1>
-          <h1>Brad is <span class="status status-unknown">moody</span></h1>
+          <h1>Rewards are <span class="status status-unknown">unknown</span></h1>
+          <h1>Brad is <span class="status status-success">happy</span></h1>
+        </div>
+
+        <div class="logo">
+          <img src="/static/img/logo.png" alt="Logo"/>
         </div>
       </div>
 
