@@ -1,0 +1,20 @@
+{
+  "name": "corgi",
+  "version": "0.0.0",
+  "description": "ERROR: No README.md file found!",
+  "main": "server.js",
+  "dependencies": {
+    "socket.io": "~0.9.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nickhs/corgi.git"
+  },
+  "author": "",
+  "license": "BSD"
+}
