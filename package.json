@@ -4,7 +4,9 @@
   "description": "ERROR: No README.md file found!",
   "main": "server.js",
   "dependencies": {
-    "socket.io": "~0.9.10"
+    "express": "~3.0.0rc5",
+    "socket.io": "~0.9.10",
+    "winston": "~0.6.2"
   },
   "devDependencies": {},
   "scripts": {
@@ -16,5 +18,5 @@
     "url": "git://github.com/nickhs/corgi.git"
   },
   "author": "",
-  "license": "BSD"
+  "license": "None"
 }
