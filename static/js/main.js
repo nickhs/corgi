@@ -29,19 +29,24 @@ var CasesManager = new Class({
     }.bind(this), 60000);
   },
 
-  addCases: function(cases) {
-    console.log("Adding cases", cases);
+  addCases: function(data) {
+    console.log("Adding cases", data);
     var tplt = this.template.join('');
 
     var existing_cases = this.spine.getChildren();
+    var cases = data.cases;
 
     if (existing_cases.length === 0) {
-      new_cases = cases.cases;
+      new_cases = cases;
     } else {
-      var top_case = existing_cases[0].id;
-      for (var i = cases.cases.length; i < 0; i--) {
-        if (top_case == cases.cases[i].id) {
-          new_cases = cases.cases.slice(cases.cases.length, i+1);
+      var top_case = existing_cases[0].get('data-id');
+      console.log('top case', top_case);
+      for (var i = 0; i < cases.length; i++) {
+        console.log('cur case', cases[i].id);
+        if (top_case == cases[i].id) {
+          console.log("MATCH FOUND", i);
+          new_cases = cases.slice(i+1);
+          console.log("New cases", new_cases);
         }
       }
     }
@@ -71,7 +76,6 @@ var CasesManager = new Class({
     var msPerDay = msPerHour * 24;
 
     var elapsed = Date.now() - Date.parse(time);
-    console.log(elapsed);
 
     if (elapsed < msPerMinute) {
          return Math.round(elapsed/1000) + ' seconds ago';
@@ -91,10 +95,6 @@ var CasesManager = new Class({
     $$('.open-cases span')[0].set('text', count.count);
   },
 
-  changeWeekCount: function(count) {
-    $$('.week span')[0].set('text', count.count);
-  },
-
   changeTimes: function() {
     console.log("changing times");
     var children = this.spine.getChildren();
@@ -112,6 +112,5 @@ var WebsocketManager = new Class({
    this.socket = io.connect('http://localhost');
    this.socket.on('new_items', cm.addCases.bind(cm));
    this.socket.on('count', cm.changeCaseCount.bind(cm));
-   this.socket.on('week_count', cm.changeWeekCount.bind(cm));
   }
 });

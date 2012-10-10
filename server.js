@@ -1,4 +1,10 @@
 var winston = require('winston');
+winston.remove(winston.transports.Console);
+winston.add(winston.transports.Console, {
+  timestamp: true,
+  colorize: true
+});
+
 var request = require('request');
 
 var settings = require('./settings');
@@ -39,7 +45,7 @@ function kickstart() {
 function updateCaseList(response) {
   // winston.info('updateCaseList running');
   var cases = response.results;
-  formatted_cases = [];
+  var formatted_cases = [];
   cases.forEach(function(item, idx) {
     formatted_cases.push(formatResponse(item));
   });
@@ -47,7 +53,7 @@ function updateCaseList(response) {
   if (formatted_cases.length != open_cases.length) {
     haveNewItems(formatted_cases);
   } else {
-    for (var i = 0; i > formatted_cases.length; i++) {
+    for (var i = 0; i < formatted_cases.length; i++) {
       if (formatted_cases[i].id != open_cases[i].id) {
         haveNewItems(formatted_cases);
         break;
@@ -57,9 +63,9 @@ function updateCaseList(response) {
 }
 
 function haveNewItems(cases) {
-  sendNewItems(formatted_cases);
-  open_cases = formatted_cases;
-  week_count += formatted_cases.length;
+  sendNewItems(cases);
+  open_cases = cases;
+  week_count += cases.length;
 }
 
 function formatResponse(item) {
@@ -72,10 +78,11 @@ function formatResponse(item) {
   return x;
 }
 
-function sendNewItems(new_items) {
-  winston.info("sending new items");
-  io.sockets.emit('new_items', {cases: new_items});
-  io.sockets.emit('count', {count: open_cases.length});
+function sendNewItems(items) {
+  winston.info("sending items", items);
+  io.sockets.emit('new_items', {cases: items});
+  winston.info('count', items.length);
+  io.sockets.emit('count', {count: items.length});
   io.sockets.emit('week_count', {count: week_count});
 }
 
