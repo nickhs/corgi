@@ -9,6 +9,7 @@ var request = require('request');
 
 var settings = require('./settings');
 var desk = require('./desk_client');
+var siteup = require('./siteup');
 
 var express = require('express');
 var app = express();
@@ -18,6 +19,8 @@ io.set('log level', 1);
 
 var open_cases = [];
 var week_count = 0;
+
+var site_status = 'unknown';
 
 app.use('/static', express['static'](__dirname + '/static'));
 
@@ -33,12 +36,17 @@ app.get('/cases/open/length', function(req, res) {
   res.json({length: open_cases.length});
 });
 
+app.get('/sitestatus', function(req, res) {
+  res.json({status: site_status});
+});
+
 function kickstart() {
   server.listen(3000);
   winston.info('Started on :3000');
 
   var case_intv = setInterval(function() {
     desk.getOpenCases(updateCaseList);
+    siteup.checkSite(siteStatus);
   }, settings.refresh_rate);
 }
 
@@ -86,8 +94,21 @@ function sendNewItems(items) {
   io.sockets.emit('week_count', {count: week_count});
 }
 
+function siteStatus(resp) {
+  if (resp === undefined) {
+    winston.warn("Still running?");
+    return;
+  }
+
+  if (resp != site_status) {
+    io.sockets.emit('kiip', resp);
+    site_status = resp;
+  }
+}
+
 io.sockets.on('connection', function(socket) {
   sendNewItems(open_cases);
+  io.sockets.emit('kiip', site_status);
 });
 
 kickstart();
