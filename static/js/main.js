@@ -45,6 +45,7 @@ var CasesManager = new Class({
     var existing_cases = this.spine.getChildren();
     var cases = data.cases;
 
+    var new_cases;
     if (existing_cases.length === 0) {
       new_cases = cases;
     } else {
@@ -56,8 +57,13 @@ var CasesManager = new Class({
           console.log("MATCH FOUND", i);
           new_cases = cases.slice(i+1);
           console.log("New cases", new_cases);
+          break;
         }
       }
+    }
+
+    if (new_cases == undefined) {
+      new_cases = cases;
     }
 
     new_cases.each(function(item, idx) {
