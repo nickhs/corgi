@@ -18,6 +18,8 @@ function checkSite(cb) {
     running = false;
     if (!e && r.statusCode == 200) {
       cb('success');
+    } else if (e == undefined) {
+      cb('failed');
     } else if (e.code == "ETIMEDOUT") {
       cb('timed');
     } else {
