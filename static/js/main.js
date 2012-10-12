@@ -37,6 +37,7 @@ var CasesManager = new Class({
     console.log("Adding cases", data);
 
     if (data.cases.length === 0) {
+      this.markAllDone();
       return;
     }
 
@@ -66,6 +67,8 @@ var CasesManager = new Class({
       new_cases = cases;
     }
 
+    this.markAllDone();
+
     new_cases.each(function(item, idx) {
       var model = {
         title: item.subject,
@@ -83,6 +86,14 @@ var CasesManager = new Class({
 
       el.inject(this.spine, 'top');
     }.bind(this));
+  },
+
+  markAllDone: function() {
+    var cases = this.spine.getChildren();
+
+    cases.each(function(item, idx) {
+      item.addClass('resolved');
+    });
   },
 
   findRelativeTime: function(time) {

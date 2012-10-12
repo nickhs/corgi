@@ -123,3 +123,7 @@ html, body {
 .logo img {
   width: 30%;
 }
+
+.resolved span.id {
+  background-color: rgba(51, 160, 36, 0.89);
+}
